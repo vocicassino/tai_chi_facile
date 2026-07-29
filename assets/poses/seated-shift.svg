@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" role="img" aria-label="seated-shift">
+
+    <defs>
+      <linearGradient id="shirt" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#6f9182"/>
+        <stop offset=".58" stop-color="#527466"/>
+        <stop offset="1" stop-color="#35584e"/>
+      </linearGradient>
+      <linearGradient id="pants" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#465552"/>
+        <stop offset="1" stop-color="#283533"/>
+      </linearGradient>
+      <radialGradient id="skin" cx="35%" cy="28%" r="75%">
+        <stop offset="0" stop-color="#efc3a4"/>
+        <stop offset="1" stop-color="#c98c67"/>
+      </radialGradient>
+      <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="9" stdDeviation="8" flood-color="#183b35" flood-opacity=".18"/>
+      </filter>
+    </defs>
+<ellipse cx="200" cy="463" rx="120" ry="15" fill="#183b35" opacity=".10"/>
+<g filter="url(#soft)" opacity=".96">
+<rect x="238" y="185" width="86" height="185" rx="18" fill="#d8c4ad"/>
+<rect x="115" y="292" width="185" height="38" rx="14" fill="#d8c4ad"/>
+<path d="M135 325 L125 455" stroke="#8b6848" stroke-width="14" stroke-linecap="round"/>
+<path d="M285 325 L300 455" stroke="#8b6848" stroke-width="14" stroke-linecap="round"/>
+<path d="M312 212 L318 455" stroke="#b99167" stroke-width="15" stroke-linecap="round"/>
+</g>
+<path d="M 182 285 Q 142 330 133 405" fill="none" stroke="#183b35" stroke-opacity=".14" stroke-width="56" stroke-linecap="round" stroke-linejoin="round" transform="translate(4 5)"/><path d="M 182 285 Q 142 330 133 405" fill="none" stroke="url(#pants)" stroke-width="46" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M 133 405 L 100 417" fill="none" stroke="#183b35" stroke-opacity=".14" stroke-width="34" stroke-linecap="round" stroke-linejoin="round" transform="translate(4 5)"/><path d="M 133 405 L 100 417" fill="none" stroke="#e9e5dc" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M 77 422 L 125 422" stroke="#b9b4aa" stroke-width="5" stroke-linecap="round"/>
+<path d="M 218 285 Q 258 330 248 400" fill="none" stroke="#183b35" stroke-opacity=".14" stroke-width="56" stroke-linecap="round" stroke-linejoin="round" transform="translate(4 5)"/><path d="M 218 285 Q 258 330 248 400" fill="none" stroke="url(#pants)" stroke-width="46" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M 248 400 L 282 414" fill="none" stroke="#183b35" stroke-opacity=".14" stroke-width="34" stroke-linecap="round" stroke-linejoin="round" transform="translate(4 5)"/><path d="M 248 400 L 282 414" fill="none" stroke="#e9e5dc" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M 259 419 L 307 419" stroke="#b9b4aa" stroke-width="5" stroke-linecap="round"/>
+<rect x="184" y="120" width="32" height="42" rx="14" fill="url(#skin)" transform="translate(0 0)"/>
+<path d="M 145 165 Q 200 135 255 165 L 240 294 Q 200 315 160 294 Z" fill="url(#shirt)" filter="url(#soft)" transform="translate(0 0)"/>
+<path d="M 166 173 Q 200 155 235 174" fill="none" stroke="#9ab2a7" stroke-opacity=".55" stroke-width="4" transform="translate(0 0)"/>
+<path d="M 201 168 L 201 285" stroke="#294b42" stroke-opacity=".38" stroke-width="3" transform="translate(0 0)"/>
+<circle cx="201" cy="205" r="3" fill="#d5dfda" transform="translate(0 0)"/>
+<circle cx="201" cy="235" r="3" fill="#d5dfda" transform="translate(0 0)"/>
+<path d="M 160 170 Q 150 230 165 280" fill="none" stroke="#183b35" stroke-opacity=".14" stroke-width="41" stroke-linecap="round" stroke-linejoin="round" transform="translate(4 5)"/><path d="M 160 170 Q 150 230 165 280" fill="none" stroke="#527466" stroke-width="31" stroke-linecap="round" stroke-linejoin="round" />
+<ellipse cx="165" cy="280" rx="18" ry="14" fill="url(#skin)" transform="rotate(-8 165 280)"/>
+<path d="M 154 281 Q 165 287 177 281" fill="none" stroke="#b97f5c" stroke-width="2" stroke-linecap="round"/>
+<path d="M 240 170 Q 250 230 235 280" fill="none" stroke="#183b35" stroke-opacity=".14" stroke-width="41" stroke-linecap="round" stroke-linejoin="round" transform="translate(4 5)"/><path d="M 240 170 Q 250 230 235 280" fill="none" stroke="#527466" stroke-width="31" stroke-linecap="round" stroke-linejoin="round" />
+<ellipse cx="235" cy="280" rx="18" ry="14" fill="url(#skin)" transform="rotate(-8 235 280)"/>
+<path d="M 224 281 Q 235 287 247 281" fill="none" stroke="#b97f5c" stroke-width="2" stroke-linecap="round"/>
+<ellipse cx="200" cy="86" rx="48" ry="55" fill="url(#skin)" filter="url(#soft)" transform="translate(0 0)"/>
+<path d="M154 82 Q155 29 202 28 Q246 29 249 78 Q229 55 205 54 Q179 55 154 82Z" fill="#6b6b68" transform="translate(0 0)"/>
+<path d="M159 62 Q178 32 206 35" fill="none" stroke="#9b9b97" stroke-width="7" stroke-linecap="round" transform="translate(0 0)"/>
+<ellipse cx="184" cy="88" rx="4.3" ry="3.2" fill="#253a36" transform="translate(0 0)"/>
+<ellipse cx="218" cy="88" rx="4.3" ry="3.2" fill="#253a36" transform="translate(0 0)"/>
+<path d="M201 88 Q195 103 202 108" fill="none" stroke="#b97f5c" stroke-width="3" stroke-linecap="round" transform="translate(0 0)"/>
+<path d="M185 116 Q201 126 218 115" fill="none" stroke="#8e5d4f" stroke-width="3" stroke-linecap="round" transform="translate(0 0)"/>
+<path d="M173 81 Q183 75 191 80 M210 80 Q220 75 229 82" fill="none" stroke="#5b514a" stroke-width="3" stroke-linecap="round" transform="translate(0 0)"/>
+</svg>
