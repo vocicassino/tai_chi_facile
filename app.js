@@ -298,6 +298,26 @@ function startRoutine(routineId) {
   loadMove(0);
 }
 
+const poseImages = {
+  "move-root": "assets/poses/root.svg",
+  "move-open": "assets/poses/open.svg",
+  "move-cloud": "assets/poses/cloud.svg",
+  "move-shift": "assets/poses/shift.svg",
+  "move-push": "assets/poses/push.svg",
+  "move-seated": "assets/poses/seated.svg",
+  "move-seated move-open": "assets/poses/seated-open.svg",
+  "move-seated move-cloud": "assets/poses/seated-cloud.svg",
+  "move-seated move-push": "assets/poses/seated-push.svg",
+  "move-seated move-shift": "assets/poses/seated-shift.svg"
+};
+
+function getPoseImage(movementClass) {
+  if (poseImages[movementClass]) return poseImages[movementClass];
+  if (movementClass.includes("move-seated")) return poseImages["move-seated"];
+  const key = Object.keys(poseImages).find(item => movementClass.includes(item) && !item.includes(" "));
+  return poseImages[key] || poseImages["move-root"];
+}
+
 function loadMove(index) {
   if (!currentRoutine) return;
   if (index >= currentRoutine.moves.length) return finishSession();
@@ -319,6 +339,9 @@ function loadMove(index) {
   $("#pauseIcon").textContent = "Ⅱ";
   $("#pauseLabel").textContent = "Pausa";
   $("#movementStage").className = `movement-stage ${movementClass}`;
+  const movementImage = $("#movementImage");
+  movementImage.src = getPoseImage(movementClass);
+  movementImage.alt = `${title}: ${instruction}`;
   updateTimerUI();
   signalChange();
   speak(`${title}. ${instruction}. ${breath}.`);

@@ -20,3 +20,7 @@ Web app installabile (PWA) per routine guidate di Tai Chi semplici e adatte ai p
 
 ## Nota
 Per funzionare come PWA e usare il service worker, l'app deve essere aperta via HTTPS o localhost, non direttamente come file locale.
+
+
+## Aggiornamento 1.1
+La schermata di allenamento usa ora dieci illustrazioni umane semirealistiche, una per ciascuna famiglia di movimento, salvate localmente per funzionare anche offline.
