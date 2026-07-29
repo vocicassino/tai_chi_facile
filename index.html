@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0f5f58">
+  <meta name="description" content="Routine guidate di Tai Chi semplici, lente e adatte ai principianti.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Tai Chi Facile">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+  <title>Tai Chi Facile</title>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <button class="icon-button hidden" id="backBtn" aria-label="Torna indietro">←</button>
+      <div>
+        <p class="eyebrow" id="headerEyebrow">Il tuo momento</p>
+        <h1 id="headerTitle">Tai Chi Facile</h1>
+      </div>
+      <button class="icon-button" id="soundBtn" aria-label="Attiva o disattiva la voce" aria-pressed="true">🔊</button>
+    </header>
+
+    <main>
+      <section class="screen active" id="homeScreen" data-screen="home">
+        <div class="hero-card">
+          <div>
+            <span class="pill">Movimenti semplici</span>
+            <h2>Più equilibrio.<br>Più energia.<br>Meno pressione.</h2>
+            <p>Routine lente e guidate, pensate per iniziare senza fretta.</p>
+          </div>
+          <div class="hero-orbit" aria-hidden="true">
+            <div class="mini-figure"><span></span><i></i><b></b></div>
+          </div>
+        </div>
+
+        <div class="daily-card">
+          <div class="daily-copy">
+            <p class="section-kicker">OGGI</p>
+            <h3 id="todayRoutineTitle">Risveglio dolce</h3>
+            <p id="todayRoutineMeta">7 minuti · Principiante</p>
+          </div>
+          <button class="primary-button" id="startTodayBtn">Inizia ora <span>▶</span></button>
+        </div>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">SCEGLI IL TUO TEMPO</p>
+              <h3>Routine rapide</h3>
+            </div>
+            <button class="text-button" data-nav="routines">Vedi tutte</button>
+          </div>
+          <div class="quick-grid" id="quickRoutineGrid"></div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">COSTANZA</p>
+              <h3>La tua settimana</h3>
+            </div>
+            <strong class="streak-badge"><span id="streakCount">0</span> giorni</strong>
+          </div>
+          <div class="week-strip" id="weekStrip"></div>
+          <p class="gentle-note" id="weeklyMessage">Anche cinque minuti contano.</p>
+        </section>
+
+        <section class="safety-card">
+          <div class="safety-icon">✓</div>
+          <div>
+            <h3>Regola semplice</h3>
+            <p>Muoviti solo entro un’ampiezza comoda. Il Tai Chi non deve provocare dolore.</p>
+          </div>
+        </section>
+      </section>
+
+      <section class="screen" id="routinesScreen" data-screen="routines">
+        <div class="screen-intro">
+          <p class="section-kicker">PROGRAMMI</p>
+          <h2>Scegli come ti senti oggi</h2>
+          <p>Ogni routine può essere interrotta, rallentata o ripetuta.</p>
+        </div>
+        <div class="filter-row" id="filterRow">
+          <button class="filter-chip active" data-filter="all">Tutte</button>
+          <button class="filter-chip" data-filter="standing">In piedi</button>
+          <button class="filter-chip" data-filter="seated">Da seduti</button>
+          <button class="filter-chip" data-filter="relax">Rilassanti</button>
+        </div>
+        <div class="routine-list" id="routineList"></div>
+      </section>
+
+      <section class="screen" id="progressScreen" data-screen="progress">
+        <div class="screen-intro">
+          <p class="section-kicker">PROGRESSI</p>
+          <h2>Conta la continuità, non la perfezione</h2>
+          <p>I dati restano salvati solo su questo dispositivo.</p>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card"><span>Sessioni</span><strong id="totalSessions">0</strong></article>
+          <article class="stat-card"><span>Minuti</span><strong id="totalMinutes">0</strong></article>
+          <article class="stat-card"><span>Serie migliore</span><strong><span id="bestStreak">0</span> gg</strong></article>
+        </div>
+        <section class="section-block">
+          <div class="section-heading">
+            <div><p class="section-kicker">ULTIMI 7 GIORNI</p><h3>Minuti praticati</h3></div>
+          </div>
+          <div class="bar-chart" id="barChart" aria-label="Grafico dei minuti praticati negli ultimi sette giorni"></div>
+        </section>
+        <section class="section-block">
+          <div class="section-heading">
+            <div><p class="section-kicker">TRAGUARDI</p><h3>Piccole vittorie</h3></div>
+          </div>
+          <div class="achievement-list" id="achievementList"></div>
+        </section>
+      </section>
+
+      <section class="screen" id="settingsScreen" data-screen="settings">
+        <div class="screen-intro">
+          <p class="section-kicker">IMPOSTAZIONI</p>
+          <h2>Adatta la pratica a te</h2>
+        </div>
+        <div class="settings-list">
+          <label class="setting-row">
+            <span><strong>Guida vocale</strong><small>Legge istruzioni e cambi movimento</small></span>
+            <input type="checkbox" id="voiceToggle" checked>
+          </label>
+          <label class="setting-row">
+            <span><strong>Vibrazione</strong><small>Segnale leggero al cambio esercizio</small></span>
+            <input type="checkbox" id="vibrationToggle" checked>
+          </label>
+          <label class="setting-row">
+            <span><strong>Movimenti ridotti</strong><small>Riduce le animazioni dell’app</small></span>
+            <input type="checkbox" id="motionToggle">
+          </label>
+          <label class="setting-row select-row">
+            <span><strong>Velocità della voce</strong><small>Più lenta può essere più facile da seguire</small></span>
+            <select id="voiceRate">
+              <option value="0.75">Molto lenta</option>
+              <option value="0.9" selected>Lenta</option>
+              <option value="1">Normale</option>
+            </select>
+          </label>
+        </div>
+        <button class="secondary-button full" id="installBtn">Installa l’app</button>
+        <button class="danger-button full" id="resetProgressBtn">Azzera i progressi</button>
+        <div class="about-card">
+          <h3>Informazioni importanti</h3>
+          <p>Questa app propone attività motorie generiche e non sostituisce il parere di un medico o di un insegnante qualificato.</p>
+          <button class="text-button" id="openSafetyBtn">Leggi tutte le indicazioni</button>
+        </div>
+        <p class="version-label">Tai Chi Facile · versione 1.0</p>
+      </section>
+
+      <section class="screen session-screen" id="sessionScreen" data-screen="session">
+        <div class="session-topline">
+          <span id="sessionStepLabel">Movimento 1 di 6</span>
+          <button class="text-button" id="exitSessionBtn">Esci</button>
+        </div>
+        <div class="progress-track"><div id="sessionProgress"></div></div>
+
+        <div class="movement-stage" id="movementStage">
+          <div class="breath-halo"></div>
+          <svg class="body-figure" viewBox="0 0 220 300" role="img" aria-label="Figura animata che mostra il movimento">
+            <circle class="figure-head" cx="110" cy="42" r="22"/>
+            <path class="figure-body" d="M110 66 L110 155"/>
+            <path class="figure-arm left-arm" d="M110 88 L70 120 L42 108"/>
+            <path class="figure-arm right-arm" d="M110 88 L150 120 L178 108"/>
+            <path class="figure-leg left-leg" d="M110 154 L82 215 L70 278"/>
+            <path class="figure-leg right-leg" d="M110 154 L138 215 L150 278"/>
+          </svg>
+          <div class="support-line" aria-hidden="true"></div>
+        </div>
+
+        <div class="session-copy">
+          <span class="pill" id="movementFocus">Respira</span>
+          <h2 id="movementTitle">Posizione iniziale</h2>
+          <p id="movementInstruction">Piedi alla larghezza delle spalle, ginocchia morbide.</p>
+          <div class="breath-cue"><span id="breathDot"></span><strong id="breathText">Respira naturalmente</strong></div>
+        </div>
+
+        <div class="timer-ring" aria-label="Tempo rimanente">
+          <svg viewBox="0 0 120 120"><circle class="timer-bg" cx="60" cy="60" r="52"/><circle class="timer-value" id="timerCircle" cx="60" cy="60" r="52"/></svg>
+          <strong id="timerText">00:30</strong>
+        </div>
+
+        <div class="session-controls">
+          <button class="round-button" id="prevMoveBtn" aria-label="Movimento precedente">↶</button>
+          <button class="pause-button" id="pauseBtn"><span id="pauseIcon">Ⅱ</span><small id="pauseLabel">Pausa</small></button>
+          <button class="round-button" id="nextMoveBtn" aria-label="Movimento successivo">↷</button>
+        </div>
+      </section>
+
+      <section class="screen completion-screen" id="completionScreen" data-screen="completion">
+        <div class="completion-symbol">✓</div>
+        <p class="section-kicker">SESSIONE COMPLETATA</p>
+        <h2>Hai scelto di prenderti cura di te.</h2>
+        <p id="completionText">7 minuti di movimento lento e consapevole.</p>
+        <div class="completion-stats">
+          <div><strong id="completionMinutes">7</strong><span>minuti</span></div>
+          <div><strong id="completionStreak">1</strong><span>giorni di fila</span></div>
+        </div>
+        <label class="mood-picker">
+          <span>Come ti senti?</span>
+          <div>
+            <button data-mood="1" aria-label="Stanco">😌</button>
+            <button data-mood="2" aria-label="Bene">🙂</button>
+            <button data-mood="3" aria-label="Energico">💪</button>
+          </div>
+        </label>
+        <button class="primary-button full" id="finishBtn">Torna alla home</button>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" id="bottomNav" aria-label="Navigazione principale">
+      <button class="nav-item active" data-nav="home"><span>⌂</span><small>Oggi</small></button>
+      <button class="nav-item" data-nav="routines"><span>◫</span><small>Routine</small></button>
+      <button class="nav-item" data-nav="progress"><span>⌁</span><small>Progressi</small></button>
+      <button class="nav-item" data-nav="settings"><span>⚙</span><small>Impostazioni</small></button>
+    </nav>
+  </div>
+
+  <dialog id="safetyDialog">
+    <form method="dialog" class="dialog-card">
+      <div class="dialog-icon">☯</div>
+      <h2>Prima di iniziare</h2>
+      <p>Pratica in uno spazio libero, su una superficie stabile e vicino a un appoggio se il tuo equilibrio è incerto.</p>
+      <ul>
+        <li>Interrompi subito in caso di dolore, capogiro, fiato corto insolito o malessere.</li>
+        <li>Non bloccare le ginocchia e non forzare articolazioni o schiena.</li>
+        <li>Con problemi cardiaci, articolari, neurologici, fratture recenti o osteoporosi severa, chiedi prima al medico.</li>
+      </ul>
+      <label class="dialog-check"><input type="checkbox" id="safetyAccepted"> Ho letto e voglio procedere con calma.</label>
+      <button class="primary-button full" id="acceptSafetyBtn" value="default" disabled>Continua</button>
+    </form>
+  </dialog>
+
+  <dialog id="confirmDialog">
+    <form method="dialog" class="dialog-card compact">
+      <h2 id="confirmTitle">Conferma</h2>
+      <p id="confirmText">Vuoi continuare?</p>
+      <div class="dialog-actions">
+        <button class="secondary-button" value="cancel">Annulla</button>
+        <button class="danger-button" id="confirmActionBtn" value="default">Conferma</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
