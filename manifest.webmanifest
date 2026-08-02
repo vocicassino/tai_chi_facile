@@ -1,14 +1,14 @@
 {
   "name": "Tai Chi Facile",
   "short_name": "Tai Chi",
-  "description": "Routine guidate di Tai Chi semplici, lente e adatte ai principianti.",
+  "description": "Routine di Tai Chi facili da seguire per uomini. Mantieni equilibrio, flessibilità ed energia.",
   "lang": "it-IT",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#f5f2e9",
-  "theme_color": "#0f5f58",
+  "background_color": "#07080d",
+  "theme_color": "#07080d",
   "categories": ["health", "fitness", "lifestyle"],
   "icons": [
     { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },

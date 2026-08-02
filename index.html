@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#0f5f58">
-  <meta name="description" content="Routine guidate di Tai Chi semplici, lente e adatte ai principianti.">
+  <meta name="theme-color" content="#0a0b10">
+  <meta name="description" content="Routine di Tai Chi facili da seguire per uomini: equilibrio, flessibilità ed energia con un'app dallo stile moderno.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Tai Chi Facile">
@@ -16,115 +16,139 @@
 </head>
 <body>
   <div class="app-shell">
-    <header class="topbar">
-      <button class="icon-button hidden" id="backBtn" aria-label="Torna indietro">←</button>
-      <div>
-        <p class="eyebrow" id="headerEyebrow">Il tuo momento</p>
-        <h1 id="headerTitle">Tai Chi Facile</h1>
-      </div>
-      <button class="icon-button" id="soundBtn" aria-label="Attiva o disattiva la voce" aria-pressed="true">🔊</button>
-    </header>
-
-    <main>
+    <main class="main-content">
       <section class="screen active" id="homeScreen" data-screen="home">
-        <div class="hero-card">
-          <div>
-            <span class="pill">Movimenti semplici</span>
-            <h2>Più equilibrio.<br>Più energia.<br>Meno pressione.</h2>
-            <p>Routine lente e guidate, pensate per iniziare senza fretta.</p>
-          </div>
-          <div class="hero-orbit" aria-hidden="true">
-            <div class="mini-figure"><span></span><i></i><b></b></div>
-          </div>
+        <div class="screen-top-row">
+          <div class="energy-pill"><span>⚡</span><strong id="energyPoints">8</strong></div>
+          <h1 class="center-title">PIANO</h1>
+          <button class="circle-icon-button" id="goProfileBtn" data-nav="profile" aria-label="Apri profilo">☰</button>
         </div>
 
-        <div class="daily-card">
-          <div class="daily-copy">
-            <p class="section-kicker">OGGI</p>
-            <h3 id="todayRoutineTitle">Risveglio dolce</h3>
-            <p id="todayRoutineMeta">7 minuti · Principiante</p>
-          </div>
-          <button class="primary-button" id="startTodayBtn">Inizia ora <span>▶</span></button>
-        </div>
-
-        <section class="section-block">
-          <div class="section-heading">
-            <div>
-              <p class="section-kicker">SCEGLI IL TUO TEMPO</p>
-              <h3>Routine rapide</h3>
-            </div>
-            <button class="text-button" data-nav="routines">Vedi tutte</button>
-          </div>
-          <div class="quick-grid" id="quickRoutineGrid"></div>
+        <section class="dashboard-panel hero-panel">
+          <p class="muted-label">Progresso generale <strong id="overallProgressLabel">0/30</strong></p>
+          <div class="progress-line"><div id="overallProgressBar"></div></div>
+          <div class="week-row" id="weekSelector"></div>
         </section>
 
-        <section class="section-block">
-          <div class="section-heading">
-            <div>
-              <p class="section-kicker">COSTANZA</p>
-              <h3>La tua settimana</h3>
-            </div>
-            <strong class="streak-badge"><span id="streakCount">0</span> giorni</strong>
+        <article class="feature-card gradient-outline" id="featuredRoutineCard">
+          <div class="feature-content">
+            <span class="tag">PRIMA ROUTINE</span>
+            <h2 id="todayRoutineTitle">INIZIO SEMPLICE: TAI CHI</h2>
+            <p id="todayRoutineDescription">Personalizzato apposta per te</p>
+            <small id="todayRoutineMeta">5 min</small>
+            <button class="primary-cta" id="startTodayBtn">INIZIA</button>
           </div>
-          <div class="week-strip" id="weekStrip"></div>
-          <p class="gentle-note" id="weeklyMessage">Anche cinque minuti contano.</p>
-        </section>
+          <div class="feature-image-box"><img id="todayRoutineImage" src="assets/img/hero.png" alt="Routine di Tai Chi consigliata"></div>
+        </article>
 
-        <section class="safety-card">
-          <div class="safety-icon">✓</div>
-          <div>
-            <h3>Regola semplice</h3>
-            <p>Muoviti solo entro un’ampiezza comoda. Il Tai Chi non deve provocare dolore.</p>
+        <article class="feature-card compact-card">
+          <div class="feature-content">
+            <span class="tag alt">SFIDA</span>
+            <h2>ROUTINE MATTUTINA</h2>
+            <p>Durata: 12 minuti</p>
+            <button class="primary-cta small" id="openMorningChallengeBtn">INIZIA L'ALLENAMENTO</button>
           </div>
-        </section>
+          <div class="feature-image-box right-fit"><img src="assets/img/push.png" alt="Uomo in posa di Tai Chi"></div>
+        </article>
+
+        <article class="connect-card">
+          <div class="connect-icon">🪑</div>
+          <div class="connect-copy">
+            <h3>TAI CHI DA SEDIA</h3>
+            <p>Movimenti dolci per equilibrio e postura</p>
+          </div>
+          <button class="outline-cta" id="startChairBtn">CONNETTI</button>
+        </article>
       </section>
 
-      <section class="screen" id="routinesScreen" data-screen="routines">
-        <div class="screen-intro">
-          <p class="section-kicker">PROGRAMMI</p>
-          <h2>Scegli come ti senti oggi</h2>
-          <p>Ogni routine può essere interrotta, rallentata o ripetuta.</p>
+      <section class="screen" id="trainingScreen" data-screen="training">
+        <div class="screen-title-block">
+          <span class="tag neutral">ALLENAMENTO</span>
+          <h1>Routine guidate</h1>
+          <p>Scegli una pratica semplice in base al tuo tempo e a come ti senti oggi.</p>
         </div>
         <div class="filter-row" id="filterRow">
           <button class="filter-chip active" data-filter="all">Tutte</button>
+          <button class="filter-chip" data-filter="short">Brevi</button>
           <button class="filter-chip" data-filter="standing">In piedi</button>
           <button class="filter-chip" data-filter="seated">Da seduti</button>
           <button class="filter-chip" data-filter="relax">Rilassanti</button>
         </div>
-        <div class="routine-list" id="routineList"></div>
+        <div class="training-list" id="routineList"></div>
+      </section>
+
+      <section class="screen" id="challengeScreen" data-screen="challenge">
+        <div class="screen-title-block">
+          <span class="tag neutral">IN CORSO</span>
+          <h1>ROUTINE MATTUTINA</h1>
+          <p>Raggiungi nuovi obiettivi di benessere con brevi sessioni di Tai Chi mattutine per 7 giorni consecutivi.</p>
+        </div>
+
+        <div class="challenge-progress-card">
+          <div class="challenge-progress-row">
+            <strong>🎯 Obiettivo sfida</strong>
+            <strong id="morningChallengeCounter">0/7 GIORNI</strong>
+          </div>
+          <div class="progress-line"><div id="morningChallengeBar"></div></div>
+          <div class="challenge-progress-row divider-top">
+            <span>🏆 Completati con successo</span>
+            <strong id="completedChallengesCount">0</strong>
+          </div>
+        </div>
+
+        <button class="primary-cta block" id="challengeStartBtn">VAI AL PIANO GIORNALIERO</button>
+
+        <div class="subheading">ACCETTA UNA SFIDA</div>
+        <article class="feature-card challenge-card wide-card">
+          <div class="feature-content">
+            <span class="tag gold">ESCLUSIVO</span>
+            <h2>ALLENAMENTO CON SEDIA</h2>
+            <p>Principiante · Intermedio · Avanzato</p>
+            <small>7 giorni</small>
+            <button class="primary-cta small" id="chairChallengeBtn">ACCETTA</button>
+          </div>
+          <div class="feature-image-box right-fit"><img src="assets/img/seated.png" alt="Allenamento di Tai Chi da seduti"></div>
+        </article>
       </section>
 
       <section class="screen" id="progressScreen" data-screen="progress">
-        <div class="screen-intro">
-          <p class="section-kicker">PROGRESSI</p>
-          <h2>Conta la continuità, non la perfezione</h2>
-          <p>I dati restano salvati solo su questo dispositivo.</p>
+        <div class="screen-title-block">
+          <span class="tag neutral">PROGRESSI</span>
+          <h1>I tuoi risultati</h1>
+          <p>Ogni sessione conta. Mantieni il ritmo con calma e costanza.</p>
         </div>
+
         <div class="stats-grid">
-          <article class="stat-card"><span>Sessioni</span><strong id="totalSessions">0</strong></article>
-          <article class="stat-card"><span>Minuti</span><strong id="totalMinutes">0</strong></article>
-          <article class="stat-card"><span>Serie migliore</span><strong><span id="bestStreak">0</span> gg</strong></article>
+          <article class="stats-card"><span>Sessioni</span><strong id="totalSessions">0</strong></article>
+          <article class="stats-card"><span>Minuti</span><strong id="totalMinutes">0</strong></article>
+          <article class="stats-card"><span>Serie migliore</span><strong id="bestStreak">0 gg</strong></article>
         </div>
-        <section class="section-block">
-          <div class="section-heading">
-            <div><p class="section-kicker">ULTIMI 7 GIORNI</p><h3>Minuti praticati</h3></div>
+
+        <section class="dark-card chart-card">
+          <div class="card-head">
+            <h3>Ultimi 7 giorni</h3>
+            <span class="small-muted">Minuti praticati</span>
           </div>
-          <div class="bar-chart" id="barChart" aria-label="Grafico dei minuti praticati negli ultimi sette giorni"></div>
+          <div class="bar-chart" id="barChart"></div>
         </section>
-        <section class="section-block">
-          <div class="section-heading">
-            <div><p class="section-kicker">TRAGUARDI</p><h3>Piccole vittorie</h3></div>
+
+        <section class="dark-card achievements-card">
+          <div class="card-head">
+            <h3>Piccole vittorie</h3>
+            <span class="small-muted">Traguardi raggiunti</span>
           </div>
           <div class="achievement-list" id="achievementList"></div>
         </section>
       </section>
 
-      <section class="screen" id="settingsScreen" data-screen="settings">
-        <div class="screen-intro">
-          <p class="section-kicker">IMPOSTAZIONI</p>
-          <h2>Adatta la pratica a te</h2>
+      <section class="screen" id="profileScreen" data-screen="profile">
+        <div class="screen-title-block">
+          <span class="tag neutral">PROFILO</span>
+          <h1>Impostazioni</h1>
+          <p>Personalizza la pratica, la guida vocale e il comportamento dell'app.</p>
         </div>
-        <div class="settings-list">
+
+        <div class="settings-group">
           <label class="setting-row">
             <span><strong>Guida vocale</strong><small>Legge istruzioni e cambi movimento</small></span>
             <input type="checkbox" id="voiceToggle" checked>
@@ -134,7 +158,7 @@
             <input type="checkbox" id="vibrationToggle" checked>
           </label>
           <label class="setting-row">
-            <span><strong>Movimenti ridotti</strong><small>Riduce le animazioni dell’app</small></span>
+            <span><strong>Movimenti ridotti</strong><small>Riduce le animazioni dell'app</small></span>
             <input type="checkbox" id="motionToggle">
           </label>
           <label class="setting-row select-row">
@@ -146,74 +170,83 @@
             </select>
           </label>
         </div>
-        <button class="secondary-button full" id="installBtn">Installa l’app</button>
-        <button class="danger-button full" id="resetProgressBtn">Azzera i progressi</button>
-        <div class="about-card">
-          <h3>Informazioni importanti</h3>
-          <p>Questa app propone attività motorie generiche e non sostituisce il parere di un medico o di un insegnante qualificato.</p>
-          <button class="text-button" id="openSafetyBtn">Leggi tutte le indicazioni</button>
-        </div>
-        <p class="version-label">Tai Chi Facile · versione 1.1</p>
+
+        <button class="secondary-cta block" id="installBtn">INSTALLA L'APP</button>
+        <button class="outline-cta block dark-outline" id="openSafetyBtn">INDICAZIONI DI SICUREZZA</button>
+        <button class="danger-cta block" id="resetProgressBtn">AZZERA I PROGRESSI</button>
+        <p class="version-label">Tai Chi Facile · versione 1.2</p>
       </section>
 
       <section class="screen session-screen" id="sessionScreen" data-screen="session">
-        <div class="session-topline">
-          <span id="sessionStepLabel">Movimento 1 di 6</span>
-          <button class="text-button" id="exitSessionBtn">Esci</button>
-        </div>
-        <div class="progress-track"><div id="sessionProgress"></div></div>
-
-        <div class="movement-stage" id="movementStage">
-          <div class="breath-halo"></div>
-          <img class="movement-image" id="movementImage" src="assets/poses/root.svg" alt="Uomo adulto nella posizione iniziale del Tai Chi">
-          <div class="support-line" aria-hidden="true"></div>
+        <div class="session-progress-wrapper">
+          <div class="session-segments" id="sessionSegments"></div>
+          <button class="close-session-btn" id="exitSessionBtn" aria-label="Esci dalla sessione">×</button>
         </div>
 
-        <div class="session-copy">
-          <span class="pill" id="movementFocus">Respira</span>
-          <h2 id="movementTitle">Posizione iniziale</h2>
-          <p id="movementInstruction">Piedi alla larghezza delle spalle, ginocchia morbide.</p>
-          <div class="breath-cue"><span id="breathDot"></span><strong id="breathText">Respira naturalmente</strong></div>
+        <div class="session-header-time" id="sessionStepLabel">00:45</div>
+
+        <div class="session-stage">
+          <button class="side-stage-btn" id="voiceStageBtn" aria-label="Voce on off">♫</button>
+          <img class="movement-image" id="movementImage" src="assets/img/rooted.png" alt="Movimento di Tai Chi">
+          <button class="side-stage-btn speaker" id="soundBtn" aria-label="Audio on off">🔊</button>
         </div>
 
-        <div class="timer-ring" aria-label="Tempo rimanente">
-          <svg viewBox="0 0 120 120"><circle class="timer-bg" cx="60" cy="60" r="52"/><circle class="timer-value" id="timerCircle" cx="60" cy="60" r="52"/></svg>
-          <strong id="timerText">00:30</strong>
+        <div class="movement-copy-card">
+          <div class="movement-title-row">
+            <div>
+              <span class="tag neutral" id="movementFocus">POSTURA</span>
+              <h2 id="movementTitle">Radicamento</h2>
+            </div>
+            <button class="info-btn" id="infoBtn" aria-label="Informazioni">i</button>
+          </div>
+          <p id="movementInstruction">Piedi paralleli e ginocchia morbide. Lascia scendere le spalle.</p>
+          <div class="big-timer" id="timerText">00:12</div>
+          <p class="breath-line" id="breathText">Respira naturalmente</p>
         </div>
 
-        <div class="session-controls">
-          <button class="round-button" id="prevMoveBtn" aria-label="Movimento precedente">↶</button>
-          <button class="pause-button" id="pauseBtn"><span id="pauseIcon">Ⅱ</span><small id="pauseLabel">Pausa</small></button>
-          <button class="round-button" id="nextMoveBtn" aria-label="Movimento successivo">↷</button>
+        <div class="session-controls-row">
+          <button class="control-btn" id="prevMoveBtn">←</button>
+          <button class="control-btn pause" id="pauseBtn"><span id="pauseIcon">Ⅱ</span><small id="pauseLabel">PAUSA</small></button>
+          <button class="control-btn" id="nextMoveBtn">→</button>
         </div>
+
+        <article class="next-move-card" id="nextMoveCard">
+          <div class="next-move-thumb"><img id="nextMoveImage" src="assets/img/opening.png" alt="Prossimo movimento"></div>
+          <div class="next-move-copy">
+            <small>Prossimo</small>
+            <strong id="nextMoveTitle">Aprire il respiro</strong>
+          </div>
+          <div class="next-move-arrow">→</div>
+        </article>
       </section>
 
       <section class="screen completion-screen" id="completionScreen" data-screen="completion">
-        <div class="completion-symbol">✓</div>
-        <p class="section-kicker">SESSIONE COMPLETATA</p>
-        <h2>Hai scelto di prenderti cura di te.</h2>
-        <p id="completionText">7 minuti di movimento lento e consapevole.</p>
+        <div class="completion-check">✓</div>
+        <span class="tag neutral">SESSIONE COMPLETATA</span>
+        <h1>Ottimo lavoro.</h1>
+        <p id="completionText">Hai concluso la tua pratica di oggi.</p>
         <div class="completion-stats">
-          <div><strong id="completionMinutes">7</strong><span>minuti</span></div>
-          <div><strong id="completionStreak">1</strong><span>giorni di fila</span></div>
+          <div><strong id="completionMinutes">0</strong><span>minuti</span></div>
+          <div><strong id="completionStreak">0</strong><span>giorni di fila</span></div>
         </div>
         <label class="mood-picker">
           <span>Come ti senti?</span>
           <div>
-            <button data-mood="1" aria-label="Stanco">😌</button>
+            <button data-mood="1" aria-label="Calmo">😌</button>
             <button data-mood="2" aria-label="Bene">🙂</button>
             <button data-mood="3" aria-label="Energico">💪</button>
           </div>
         </label>
-        <button class="primary-button full" id="finishBtn">Torna alla home</button>
+        <button class="primary-cta block" id="finishBtn">TORNA ALLA HOME</button>
       </section>
     </main>
 
     <nav class="bottom-nav" id="bottomNav" aria-label="Navigazione principale">
-      <button class="nav-item active" data-nav="home"><span>⌂</span><small>Oggi</small></button>
-      <button class="nav-item" data-nav="routines"><span>◫</span><small>Routine</small></button>
-      <button class="nav-item" data-nav="progress"><span>⌁</span><small>Progressi</small></button>
-      <button class="nav-item" data-nav="settings"><span>⚙</span><small>Impostazioni</small></button>
+      <button class="nav-item active" data-nav="home"><span>▣</span><small>Piano</small></button>
+      <button class="nav-item" data-nav="training"><span>◉</span><small>Allenamento</small></button>
+      <button class="nav-item" data-nav="challenge"><span>🏆</span><small>Sfide</small></button>
+      <button class="nav-item" data-nav="progress"><span>▥</span><small>Progressi</small></button>
+      <button class="nav-item" data-nav="profile"><span>◌</span><small>Profilo</small></button>
     </nav>
   </div>
 
@@ -228,7 +261,7 @@
         <li>Con problemi cardiaci, articolari, neurologici, fratture recenti o osteoporosi severa, chiedi prima al medico.</li>
       </ul>
       <label class="dialog-check"><input type="checkbox" id="safetyAccepted"> Ho letto e voglio procedere con calma.</label>
-      <button class="primary-button full" id="acceptSafetyBtn" value="default" disabled>Continua</button>
+      <button class="primary-cta block" id="acceptSafetyBtn" value="default" disabled>CONTINUA</button>
     </form>
   </dialog>
 
@@ -237,8 +270,8 @@
       <h2 id="confirmTitle">Conferma</h2>
       <p id="confirmText">Vuoi continuare?</p>
       <div class="dialog-actions">
-        <button class="secondary-button" value="cancel">Annulla</button>
-        <button class="danger-button" id="confirmActionBtn" value="default">Conferma</button>
+        <button class="outline-cta dark-outline" value="cancel">Annulla</button>
+        <button class="danger-cta" id="confirmActionBtn" value="default">Conferma</button>
       </div>
     </form>
   </dialog>

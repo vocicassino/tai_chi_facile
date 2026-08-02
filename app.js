@@ -1,122 +1,134 @@
 "use strict";
 
-const STORAGE_KEY = "taiChiFacileStateV1";
-const SETTINGS_KEY = "taiChiFacileSettingsV1";
+const STORAGE_KEY = "taiChiFacileStateV12";
+const SETTINGS_KEY = "taiChiFacileSettingsV12";
+const SESSION_TARGET = 30;
 
 const routines = [
   {
     id: "risveglio",
-    title: "Risveglio dolce",
-    minutes: 7,
+    title: "INIZIO SEMPLICE: TAI CHI",
+    shortTitle: "Risveglio dolce",
+    minutes: 5,
     level: "Principiante",
-    type: ["standing"],
-    icon: "☀️",
-    color: "#dcebe5",
-    description: "Riattiva il corpo con respiro, postura e movimenti ampi ma facili.",
+    type: ["standing", "short"],
+    description: "Personalizzato apposta per te",
+    image: "assets/img/hero.png",
     moves: [
-      ["Radicamento", "Piedi paralleli e ginocchia morbide. Lascia scendere le spalle.", "Respira naturalmente", "Stabilità", 50, "move-root"],
-      ["Aprire il respiro", "Solleva lentamente le braccia davanti a te e lasciale ridiscendere.", "Inspira salendo, espira scendendo", "Respiro", 70, "move-open"],
-      ["Nuvole lente", "Sposta le mani da un lato all’altro come se accompagnassi una nuvola.", "Espira durante il cambio lato", "Mobilità", 80, "move-cloud"],
-      ["Trasferimento del peso", "Porta il peso a destra e a sinistra senza staccare i piedi.", "Respira senza trattenere", "Equilibrio", 80, "move-shift"],
-      ["Spingere l’aria", "Porta i palmi in avanti con dolcezza, poi ritorna al petto.", "Espira mentre spingi", "Energia", 75, "move-push"],
-      ["Ritorno al centro", "Avvicina le mani all’addome e resta fermo per alcuni respiri.", "Respira lento e regolare", "Calma", 65, "move-root"]
+      ["Radicamento", "Piedi paralleli e ginocchia morbide. Lascia scendere le spalle.", "Respira naturalmente", "POSTURA", 45, "move-root"],
+      ["Aprire il respiro", "Solleva lentamente le braccia davanti a te e lasciale ridiscendere.", "Inspira salendo, espira scendendo", "RESPIRO", 55, "move-open"],
+      ["Nuvole lente", "Sposta le mani da un lato all'altro come se accompagnassi una nuvola.", "Espira durante il cambio lato", "FLUIDITÀ", 55, "move-cloud"],
+      ["Trasferimento del peso", "Porta il peso a destra e a sinistra senza staccare i piedi.", "Respira senza trattenere", "EQUILIBRIO", 55, "move-shift"],
+      ["Spingere l'aria", "Porta i palmi in avanti con dolcezza, poi ritorna al petto.", "Espira mentre spingi", "ENERGIA", 50, "move-push"]
     ]
   },
   {
     id: "cinque",
     title: "5 minuti per ripartire",
+    shortTitle: "5 minuti per ripartire",
     minutes: 5,
     level: "Facile",
-    type: ["standing", "relax"],
-    icon: "⏱️",
-    color: "#ebe2cf",
+    type: ["standing", "short", "relax"],
     description: "Una pausa breve per sciogliere tensioni e recuperare concentrazione.",
+    image: "assets/img/opening.png",
     moves: [
-      ["Postura comoda", "Allunga la schiena senza irrigidirti. Guarda avanti.", "Tre respiri tranquilli", "Postura", 40, "move-root"],
-      ["Sollevare e abbassare", "Le mani salgono fino al petto e tornano lentamente lungo i fianchi.", "Inspira su, espira giù", "Respiro", 65, "move-open"],
-      ["Dondolio controllato", "Sposta poco il peso da una gamba all’altra.", "Respira in modo continuo", "Equilibrio", 65, "move-shift"],
-      ["Allontanare la tensione", "Spingi dolcemente i palmi in avanti, senza bloccare i gomiti.", "Espira mentre allontani", "Rilascio", 65, "move-push"],
-      ["Chiusura", "Mani sull’addome. Nota il ritmo del respiro.", "Lento e naturale", "Calma", 65, "move-root"]
+      ["Postura comoda", "Allunga la schiena senza irrigidirti. Guarda avanti.", "Tre respiri tranquilli", "POSTURA", 40, "move-root"],
+      ["Sollevare e abbassare", "Le mani salgono fino al petto e tornano lentamente lungo i fianchi.", "Inspira su, espira giù", "RESPIRA", 60, "move-open"],
+      ["Dondolio controllato", "Sposta poco il peso da una gamba all'altra.", "Respira in modo continuo", "EQUILIBRIO", 60, "move-shift"],
+      ["Allontanare la tensione", "Spingi dolcemente i palmi in avanti, senza bloccare i gomiti.", "Espira mentre allontani", "RILASCIO", 60, "move-push"],
+      ["Chiusura", "Mani sull'addome. Nota il ritmo del respiro.", "Lento e naturale", "CALMA", 60, "move-root"]
     ]
   },
   {
     id: "equilibrio",
     title: "Equilibrio stabile",
+    shortTitle: "Equilibrio stabile",
     minutes: 10,
     level: "Principiante",
     type: ["standing"],
-    icon: "⚖️",
-    color: "#d8e6ef",
     description: "Allenamento dolce del trasferimento del peso con un appoggio vicino.",
+    image: "assets/img/shift.png",
     moves: [
-      ["Base stabile", "Apri i piedi quanto le spalle. Tieni una sedia vicina se serve.", "Respira naturalmente", "Sicurezza", 60, "move-root"],
-      ["Peso a destra e sinistra", "Sposta il bacino di pochi centimetri, senza inclinare il busto.", "Espira nel passaggio", "Equilibrio", 110, "move-shift"],
-      ["Passo vuoto", "Alleggerisci un piede senza sollevarlo completamente.", "Non trattenere il respiro", "Controllo", 105, "move-shift"],
-      ["Mani come nuvole", "Le mani guidano il cambio di peso da un lato all’altro.", "Inspira al centro", "Coordinazione", 115, "move-cloud"],
-      ["Spinta morbida", "Porta il peso appena avanti mentre i palmi spingono l’aria.", "Espira in avanti", "Stabilità", 105, "move-push"],
-      ["Ritorno neutro", "Ritrova il peso al centro e rilassa le caviglie.", "Tre respiri lenti", "Calma", 105, "move-root"]
+      ["Base stabile", "Apri i piedi quanto le spalle. Tieni una sedia vicina se serve.", "Respira naturalmente", "SICUREZZA", 60, "move-root"],
+      ["Peso a destra e sinistra", "Sposta il bacino di pochi centimetri, senza inclinare il busto.", "Espira nel passaggio", "EQUILIBRIO", 100, "move-shift"],
+      ["Passo vuoto", "Alleggerisci un piede senza sollevarlo completamente.", "Non trattenere il respiro", "CONTROLLO", 95, "move-shift"],
+      ["Mani come nuvole", "Le mani guidano il cambio di peso da un lato all'altro.", "Inspira al centro", "COORDINAZIONE", 100, "move-cloud"],
+      ["Spinta morbida", "Porta il peso appena avanti mentre i palmi spingono l'aria.", "Espira in avanti", "STABILITÀ", 90, "move-push"],
+      ["Ritorno neutro", "Ritrova il peso al centro e rilassa le caviglie.", "Tre respiri lenti", "CALMA", 90, "move-root"]
     ]
   },
   {
     id: "sera",
     title: "Calma della sera",
+    shortTitle: "Calma della sera",
     minutes: 12,
     level: "Rilassante",
     type: ["standing", "relax"],
-    icon: "🌙",
-    color: "#e5def0",
     description: "Movimenti lenti e respirazione per lasciare andare la giornata.",
+    image: "assets/img/rooted.png",
     moves: [
-      ["Lasciare il peso", "Senti entrambi i piedi appoggiati. Ammorbidisci il viso.", "Espira più a lungo", "Presenza", 80, "move-root"],
-      ["Raccogliere il respiro", "Le mani salgono aperte e si avvicinano al petto.", "Inspira salendo", "Respiro", 125, "move-open"],
-      ["Onde tranquille", "Muovi le braccia lentamente da un lato all’altro.", "Espira nel movimento", "Rilassamento", 130, "move-cloud"],
-      ["Spinta lenta", "Allontana i palmi senza forza e lasciali tornare.", "Espira, poi inspira tornando", "Rilascio", 125, "move-push"],
-      ["Dondolio minimo", "Oscilla appena, come un albero mosso da una brezza leggera.", "Respira senza sforzo", "Calma", 130, "move-root"],
-      ["Quiete", "Rimani fermo con le mani sull’addome e gli occhi socchiusi.", "Conta quattro entrando e sei uscendo", "Recupero", 130, "move-root"]
+      ["Lasciare il peso", "Senti entrambi i piedi appoggiati. Ammorbidisci il viso.", "Espira più a lungo", "PRESENZA", 70, "move-root"],
+      ["Raccogliere il respiro", "Le mani salgono aperte e si avvicinano al petto.", "Inspira salendo", "RESPIRO", 110, "move-open"],
+      ["Onde tranquille", "Muovi le braccia lentamente da un lato all'altro.", "Espira nel movimento", "RILASSAMENTO", 110, "move-cloud"],
+      ["Spinta lenta", "Allontana i palmi senza forza e lasciali tornare.", "Espira, poi inspira tornando", "RILASCIO", 110, "move-push"],
+      ["Quiete", "Rimani fermo con le mani sull'addome e gli occhi socchiusi.", "Conta quattro entrando e sei uscendo", "RECUPERO", 100, "move-root"]
     ]
   },
   {
     id: "sedia",
-    title: "Tai Chi da seduti",
+    title: "TAI CHI DA SEDIA",
+    shortTitle: "Tai Chi da seduti",
     minutes: 8,
     level: "Mobilità dolce",
     type: ["seated", "relax"],
-    icon: "🪑",
-    color: "#f0ded7",
     description: "Per giornate difficili o per chi preferisce una base più stabile.",
+    image: "assets/img/seated.png",
     moves: [
-      ["Seduta stabile", "Siediti verso il bordo della sedia, piedi ben appoggiati e schiena lunga.", "Respira naturalmente", "Postura", 60, "move-seated"],
-      ["Aprire il petto", "Porta le mani verso l’esterno senza forzare le spalle.", "Inspira aprendo", "Mobilità", 80, "move-seated move-open"],
-      ["Nuvole da seduti", "Accompagna le mani da un lato all’altro e ruota poco il busto.", "Espira nel cambio lato", "Coordinazione", 95, "move-seated move-cloud"],
-      ["Spinta dei palmi", "Spingi l’aria davanti a te e ritorna lentamente.", "Espira spingendo", "Energia", 85, "move-seated move-push"],
-      ["Sollevare i talloni", "Solleva un tallone alla volta mantenendo le punte a terra.", "Respira continuo", "Caviglie", 90, "move-seated move-shift"],
-      ["Chiusura calma", "Appoggia le mani sulle cosce e nota il corpo più disteso.", "Tre respiri lenti", "Calma", 70, "move-seated"]
+      ["Seduta stabile", "Siediti verso il bordo della sedia, piedi ben appoggiati e schiena lunga.", "Respira naturalmente", "POSTURA", 60, "move-seated"],
+      ["Aprire il petto", "Porta le mani verso l'esterno senza forzare le spalle.", "Inspira aprendo", "MOBILITÀ", 80, "move-seated-open"],
+      ["Nuvole da seduti", "Accompagna le mani da un lato all'altro e ruota poco il busto.", "Espira nel cambio lato", "COORDINAZIONE", 80, "move-seated-cloud"],
+      ["Spinta dei palmi", "Spingi l'aria davanti a te e ritorna lentamente.", "Espira spingendo", "ENERGIA", 80, "move-seated-push"],
+      ["Sollevare i talloni", "Solleva un tallone alla volta mantenendo le punte a terra.", "Respira continuo", "CAVIGLIE", 80, "move-seated-shift"],
+      ["Chiusura calma", "Appoggia le mani sulle cosce e nota il corpo più disteso.", "Tre respiri lenti", "CALMA", 70, "move-seated"]
     ]
   },
   {
     id: "energia",
     title: "Energia e postura",
+    shortTitle: "Energia e postura",
     minutes: 15,
     level: "Facile progressivo",
     type: ["standing"],
-    icon: "⚡",
-    color: "#f1e4b9",
     description: "Una pratica completa ma accessibile per postura, mobilità e presenza.",
+    image: "assets/img/push.png",
     moves: [
-      ["Radici", "Piedi saldi, ginocchia libere e sommità del capo verso l’alto.", "Respira naturale", "Postura", 75, "move-root"],
-      ["Aprire e chiudere", "Le braccia si aprono con calma e tornano davanti al petto.", "Inspira aprendo", "Respiro", 115, "move-open"],
-      ["Trasferire il peso", "Passa lentamente da destra a sinistra senza oscillare con la testa.", "Espira nel passaggio", "Equilibrio", 120, "move-shift"],
-      ["Nuvole", "Le mani seguono un percorso morbido all’altezza del petto.", "Respira fluido", "Coordinazione", 125, "move-cloud"],
-      ["Spingere e tornare", "Palmi avanti, gomiti morbidi, poi ritorno al centro.", "Espira avanti", "Energia", 120, "move-push"],
-      ["Cerchi piccoli", "Disegna piccoli cerchi con le mani, senza sollevare le spalle.", "Respira continuo", "Mobilità", 115, "move-cloud"],
-      ["Passo controllato", "Alleggerisci un piede e appoggialo poco più avanti, vicino al sostegno.", "Non avere fretta", "Stabilità", 115, "move-shift"],
-      ["Raccogliere", "Riporta i piedi paralleli e le mani verso l’addome.", "Espira lentamente", "Centro", 115, "move-root"]
+      ["Radici", "Piedi saldi, ginocchia libere e sommità del capo verso l'alto.", "Respira naturale", "POSTURA", 70, "move-root"],
+      ["Aprire e chiudere", "Le braccia si aprono con calma e tornano davanti al petto.", "Inspira aprendo", "RESPIRO", 100, "move-open"],
+      ["Trasferire il peso", "Passa lentamente da destra a sinistra senza oscillare con la testa.", "Espira nel passaggio", "EQUILIBRIO", 110, "move-shift"],
+      ["Nuvole", "Le mani seguono un percorso morbido all'altezza del petto.", "Respira fluido", "COORDINAZIONE", 110, "move-cloud"],
+      ["Spingere e tornare", "Palmi avanti, gomiti morbidi, poi ritorno al centro.", "Espira avanti", "ENERGIA", 110, "move-push"],
+      ["Raccogliere", "Riporta i piedi paralleli e le mani verso l'addome.", "Espira lentamente", "CENTRO", 90, "move-root"]
     ]
   }
 ];
 
+const challenges = {
+  morning: {
+    id: "morning",
+    title: "Routine mattutina",
+    targetDays: 7,
+    routineId: "risveglio"
+  },
+  chair: {
+    id: "chair",
+    title: "Allenamento con sedia",
+    targetDays: 7,
+    routineId: "sedia"
+  }
+};
+
 const defaultSettings = { voice: true, vibration: true, reducedMotion: false, voiceRate: 0.9, safetySeen: false };
-const defaultState = { sessions: [], bestStreak: 0, lastRoutine: "risveglio" };
+const defaultState = { sessions: [], bestStreak: 0, lastRoutine: "risveglio", acceptedChallenges: { chair: false } };
 
 let settings = loadJSON(SETTINGS_KEY, defaultSettings);
 let state = loadJSON(STORAGE_KEY, defaultState);
@@ -157,11 +169,26 @@ function addDays(date, amount) {
   return copy;
 }
 
+function formatTime(totalSeconds) {
+  const safe = Math.max(0, totalSeconds);
+  const minutes = Math.floor(safe / 60);
+  const seconds = safe % 60;
+  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+}
+
 function sessionsByDate() {
   return state.sessions.reduce((acc, session) => {
     (acc[session.date] ||= []).push(session);
     return acc;
   }, {});
+}
+
+function uniqueSessionDatesForRoutine(routineId) {
+  return [...new Set(state.sessions.filter(s => s.routineId === routineId).map(s => s.date))];
+}
+
+function countRoutineChallengeDays(routineId, target = 7) {
+  return Math.min(target, uniqueSessionDatesForRoutine(routineId).length);
 }
 
 function calculateStreak() {
@@ -177,78 +204,124 @@ function calculateStreak() {
   return streak;
 }
 
-function renderHome() {
-  const recommended = getRecommendedRoutine();
-  $("#todayRoutineTitle").textContent = recommended.title;
-  $("#todayRoutineMeta").textContent = `${recommended.minutes} minuti · ${recommended.level}`;
-  $("#startTodayBtn").dataset.routineId = recommended.id;
-
-  const quickIds = ["cinque", "equilibrio", "sedia", "sera"];
-  $("#quickRoutineGrid").innerHTML = quickIds.map(id => {
-    const r = routines.find(item => item.id === id);
-    return `<button class="quick-card" data-routine-id="${r.id}" style="--card-color:${r.color}">
-      <span>${r.minutes} minuti</span><strong>${r.title}</strong><small>${r.icon} ${r.level}</small>
-    </button>`;
-  }).join("");
-
-  const streak = calculateStreak();
-  $("#streakCount").textContent = streak;
-  const byDate = sessionsByDate();
-  const dayNames = ["L", "M", "M", "G", "V", "S", "D"];
-  const today = new Date();
-  const mondayOffset = (today.getDay() + 6) % 7;
-  const monday = addDays(today, -mondayOffset);
-  $("#weekStrip").innerHTML = dayNames.map((name, index) => {
-    const d = addDays(monday, index);
-    const key = localDateKey(d);
-    const classes = [byDate[key]?.length ? "done" : "", key === localDateKey(today) ? "today" : ""].filter(Boolean).join(" ");
-    return `<div class="day-dot ${classes}"><span>${name}</span><i>${d.getDate()}</i></div>`;
-  }).join("");
-  const weekCount = Object.keys(byDate).filter(key => {
-    const d = new Date(`${key}T12:00:00`);
-    return d >= monday && d <= addDays(monday, 6);
-  }).length;
-  $("#weeklyMessage").textContent = weekCount === 0 ? "Anche cinque minuti contano." : weekCount < 3 ? "Ottimo inizio: mantieni un ritmo comodo." : "Stai costruendo una buona abitudine.";
-}
-
 function getRecommendedRoutine() {
   const hour = new Date().getHours();
   if (hour >= 20) return routines.find(r => r.id === "sera");
+  if (hour >= 13) return routines.find(r => r.id === "equilibrio");
   if (state.lastRoutine === "sedia") return routines.find(r => r.id === "sedia");
   return routines.find(r => r.id === "risveglio");
 }
 
-function renderRoutines(filter = "all") {
-  const visible = filter === "all" ? routines : routines.filter(r => r.type.includes(filter));
-  $("#routineList").innerHTML = visible.map(r => `<button class="routine-card" data-routine-id="${r.id}">
-    <span class="routine-art" style="--art-color:${r.color}">${r.icon}</span>
-    <span class="routine-copy"><strong>${r.title}</strong><span>${r.minutes} min · ${r.level}<br>${r.description}</span></span>
-    <span class="routine-arrow">›</span>
-  </button>`).join("");
+function totalMinutesPracticed() {
+  return Math.round(state.sessions.reduce((sum, s) => sum + Number(s.minutes || 0), 0));
+}
+
+function completedChallengesCount() {
+  let total = 0;
+  Object.values(challenges).forEach(challenge => {
+    const done = countRoutineChallengeDays(challenge.routineId, challenge.targetDays) >= challenge.targetDays;
+    if (done) total += 1;
+  });
+  return total;
+}
+
+function renderWeekRow() {
+  const byDate = sessionsByDate();
+  const today = new Date();
+  const formatter = new Intl.DateTimeFormat("it-IT", { weekday: "short" });
+  const mondayOffset = (today.getDay() + 6) % 7;
+  const monday = addDays(today, -mondayOffset);
+  $("#weekSelector").innerHTML = Array.from({ length: 7 }, (_, index) => {
+    const day = addDays(monday, index);
+    const key = localDateKey(day);
+    const weekday = formatter.format(day).replace('.', '');
+    const classes = ["week-day"];
+    if (key === localDateKey(today)) classes.push("active");
+    if (byDate[key]?.length) classes.push("done");
+    return `<div class="${classes.join(" ")}"><span>${weekday.slice(0, 3)}</span><strong>${day.getDate()}</strong></div>`;
+  }).join("");
+}
+
+function renderHome() {
+  const recommended = getRecommendedRoutine();
+  const totalSessions = state.sessions.length;
+  const progressRatio = Math.min(1, totalSessions / SESSION_TARGET);
+  const energy = Math.min(99, 8 + totalSessions);
+
+  $("#energyPoints").textContent = String(energy);
+  $("#overallProgressLabel").textContent = `${Math.min(totalSessions, SESSION_TARGET)}/${SESSION_TARGET}`;
+  $("#overallProgressBar").style.width = `${progressRatio * 100}%`;
+  renderWeekRow();
+
+  $("#todayRoutineTitle").textContent = recommended.title;
+  $("#todayRoutineDescription").textContent = recommended.description;
+  $("#todayRoutineMeta").textContent = `${recommended.minutes} min`;
+  $("#todayRoutineImage").src = recommended.image;
+  $("#todayRoutineImage").alt = recommended.shortTitle;
+  $("#startTodayBtn").dataset.routineId = recommended.id;
+}
+
+function renderTraining(filter = "all") {
+  const visible = filter === "all"
+    ? routines
+    : routines.filter(r => r.type.includes(filter));
+
+  $("#routineList").innerHTML = visible.map(r => `
+    <button class="training-card" data-routine-id="${r.id}">
+      <div class="training-thumb"><img src="${r.image}" alt="${r.shortTitle}"></div>
+      <div class="training-copy">
+        <strong>${r.shortTitle}</strong>
+        <span>${r.minutes} min · ${r.level}<br>${r.description}</span>
+      </div>
+      <div class="training-arrow">›</div>
+    </button>
+  `).join("");
+}
+
+function renderChallenges() {
+  const progress = countRoutineChallengeDays(challenges.morning.routineId, challenges.morning.targetDays);
+  $("#morningChallengeCounter").textContent = `${progress}/${challenges.morning.targetDays} GIORNI`;
+  $("#morningChallengeBar").style.width = `${(progress / challenges.morning.targetDays) * 100}%`;
+  $("#completedChallengesCount").textContent = String(completedChallengesCount());
+  $("#chairChallengeBtn").textContent = state.acceptedChallenges?.chair ? "APRl".replace('l','I') : "ACCETTA";
 }
 
 function renderProgress() {
-  const totalMinutes = Math.round(state.sessions.reduce((sum, s) => sum + Number(s.minutes || 0), 0));
+  const totalMinutes = totalMinutesPracticed();
   const streak = calculateStreak();
   state.bestStreak = Math.max(Number(state.bestStreak || 0), streak);
   saveAll();
-  $("#totalSessions").textContent = state.sessions.length;
-  $("#totalMinutes").textContent = totalMinutes;
-  $("#bestStreak").textContent = state.bestStreak;
+
+  $("#totalSessions").textContent = String(state.sessions.length);
+  $("#totalMinutes").textContent = String(totalMinutes);
+  $("#bestStreak").textContent = `${state.bestStreak} gg`;
 
   const days = Array.from({ length: 7 }, (_, i) => addDays(new Date(), i - 6));
   const totals = days.map(day => state.sessions.filter(s => s.date === localDateKey(day)).reduce((sum, s) => sum + Number(s.minutes || 0), 0));
   const max = Math.max(15, ...totals);
   const formatter = new Intl.DateTimeFormat("it-IT", { weekday: "short" });
-  $("#barChart").innerHTML = days.map((day, i) => `<div class="bar-column" title="${totals[i]} minuti"><div style="height:${Math.max(4, (totals[i] / max) * 100)}%"></div><span>${formatter.format(day).slice(0,2)}</span></div>`).join("");
+  $("#barChart").innerHTML = days.map((day, i) => `
+    <div class="bar-column" title="${totals[i]} minuti">
+      <div style="height:${Math.max(4, (totals[i] / max) * 100)}%"></div>
+      <strong>${totals[i]}</strong>
+      <span>${formatter.format(day).slice(0,2)}</span>
+    </div>
+  `).join("");
 
   const achievements = [
     ["🌱", "Primo passo", "Completa la prima sessione", state.sessions.length >= 1],
     ["🔥", "Tre giorni", "Pratica per tre giorni di fila", state.bestStreak >= 3],
-    ["🧘", "Un’ora per te", "Raggiungi 60 minuti totali", totalMinutes >= 60],
-    ["🏆", "Dieci sessioni", "Completa dieci pratiche", state.sessions.length >= 10]
+    ["🧘", "Un'ora per te", "Raggiungi 60 minuti totali", totalMinutes >= 60],
+    ["🏆", "Sfida mattutina", "Completa 7 giorni di routine mattutina", countRoutineChallengeDays("risveglio", 7) >= 7]
   ];
-  $("#achievementList").innerHTML = achievements.map(a => `<article class="achievement ${a[3] ? "" : "locked"}"><span class="achievement-icon">${a[0]}</span><span><strong>${a[1]}</strong><small>${a[2]}</small></span></article>`).join("");
+
+  $("#achievementList").innerHTML = achievements.map(([icon, title, text, unlocked]) => `
+    <article class="achievement-item ${unlocked ? "" : "locked"}">
+      <span class="achievement-icon">${icon}</span>
+      <span><strong>${title}</strong><small>${text}</small></span>
+      <span>${unlocked ? "✓" : "○"}</span>
+    </article>
+  `).join("");
 }
 
 function renderSettings() {
@@ -258,33 +331,38 @@ function renderSettings() {
   $("#voiceRate").value = String(settings.voiceRate);
   document.body.classList.toggle("reduced-motion", settings.reducedMotion);
   $("#soundBtn").textContent = settings.voice ? "🔊" : "🔇";
-  $("#soundBtn").setAttribute("aria-pressed", String(settings.voice));
 }
 
-function showScreen(name, options = {}) {
+function showScreen(name) {
   currentScreen = name;
   $$(".screen").forEach(screen => screen.classList.toggle("active", screen.dataset.screen === name));
   $$(".nav-item").forEach(item => item.classList.toggle("active", item.dataset.nav === name));
-  const special = ["session", "completion"].includes(name);
-  document.body.classList.toggle("session-active", special);
-  $("#bottomNav").hidden = special;
-  $("#soundBtn").classList.toggle("hidden", special);
-  $("#backBtn").classList.toggle("hidden", !options.back);
-  const titles = {
-    home: ["Il tuo momento", "Tai Chi Facile"],
-    routines: ["Scegli con calma", "Le tue routine"],
-    progress: ["Un passo alla volta", "I tuoi progressi"],
-    settings: ["Personalizza", "Impostazioni"]
-  };
-  if (titles[name]) {
-    $("#headerEyebrow").textContent = titles[name][0];
-    $("#headerTitle").textContent = titles[name][1];
-  }
+  document.body.classList.toggle("session-active", ["session", "completion"].includes(name));
+
   if (name === "home") renderHome();
-  if (name === "routines") renderRoutines($(".filter-chip.active")?.dataset.filter || "all");
+  if (name === "training") renderTraining($(".filter-chip.active")?.dataset.filter || "all");
+  if (name === "challenge") renderChallenges();
   if (name === "progress") renderProgress();
-  if (name === "settings") renderSettings();
+  if (name === "profile") renderSettings();
+
   window.scrollTo({ top: 0, behavior: settings.reducedMotion ? "auto" : "smooth" });
+}
+
+const poseImages = {
+  "move-root": "assets/img/rooted.png",
+  "move-open": "assets/img/opening.png",
+  "move-cloud": "assets/img/cloud.png",
+  "move-shift": "assets/img/shift.png",
+  "move-push": "assets/img/push.png",
+  "move-seated": "assets/img/seated.png",
+  "move-seated-open": "assets/img/seated.png",
+  "move-seated-cloud": "assets/img/seated.png",
+  "move-seated-push": "assets/img/seated.png",
+  "move-seated-shift": "assets/img/seated.png"
+};
+
+function getPoseImage(movementClass) {
+  return poseImages[movementClass] || poseImages["move-root"];
 }
 
 function startRoutine(routineId) {
@@ -298,50 +376,58 @@ function startRoutine(routineId) {
   loadMove(0);
 }
 
-const poseImages = {
-  "move-root": "assets/poses/root.svg",
-  "move-open": "assets/poses/open.svg",
-  "move-cloud": "assets/poses/cloud.svg",
-  "move-shift": "assets/poses/shift.svg",
-  "move-push": "assets/poses/push.svg",
-  "move-seated": "assets/poses/seated.svg",
-  "move-seated move-open": "assets/poses/seated-open.svg",
-  "move-seated move-cloud": "assets/poses/seated-cloud.svg",
-  "move-seated move-push": "assets/poses/seated-push.svg",
-  "move-seated move-shift": "assets/poses/seated-shift.svg"
-};
+function totalRemainingSecondsForCurrentRoutine() {
+  if (!currentRoutine) return 0;
+  const currentRemaining = moveSecondsLeft;
+  const upcoming = currentRoutine.moves.slice(currentMoveIndex + 1).reduce((sum, move) => sum + move[4], 0);
+  return currentRemaining + upcoming;
+}
 
-function getPoseImage(movementClass) {
-  if (poseImages[movementClass]) return poseImages[movementClass];
-  if (movementClass.includes("move-seated")) return poseImages["move-seated"];
-  const key = Object.keys(poseImages).find(item => movementClass.includes(item) && !item.includes(" "));
-  return poseImages[key] || poseImages["move-root"];
+function renderSessionSegments() {
+  if (!currentRoutine) return;
+  $("#sessionSegments").innerHTML = currentRoutine.moves.map((_, index) => {
+    const className = index < currentMoveIndex ? "done" : index === currentMoveIndex ? "current" : "";
+    return `<span class="${className}"></span>`;
+  }).join("");
+}
+
+function updateNextMoveCard() {
+  if (!currentRoutine) return;
+  const next = currentRoutine.moves[currentMoveIndex + 1];
+  const card = $("#nextMoveCard");
+  if (!next) {
+    card.classList.add("hidden");
+    return;
+  }
+  card.classList.remove("hidden");
+  $("#nextMoveTitle").textContent = next[0];
+  $("#nextMoveImage").src = getPoseImage(next[5]);
+  $("#nextMoveImage").alt = next[0];
 }
 
 function loadMove(index) {
   if (!currentRoutine) return;
   if (index >= currentRoutine.moves.length) return finishSession();
   if (index < 0) index = 0;
+
   currentMoveIndex = index;
-  const move = currentRoutine.moves[index];
-  const [title, instruction, breath, focus, seconds, movementClass] = move;
+  const [title, instruction, breath, focus, seconds, movementClass] = currentRoutine.moves[index];
   moveDuration = seconds;
   moveSecondsLeft = seconds;
   isPaused = false;
   clearInterval(timerId);
 
-  $("#sessionStepLabel").textContent = `Movimento ${index + 1} di ${currentRoutine.moves.length}`;
-  $("#sessionProgress").style.width = `${(index / currentRoutine.moves.length) * 100}%`;
   $("#movementTitle").textContent = title;
   $("#movementInstruction").textContent = instruction;
   $("#movementFocus").textContent = focus;
   $("#breathText").textContent = breath;
   $("#pauseIcon").textContent = "Ⅱ";
-  $("#pauseLabel").textContent = "Pausa";
-  $("#movementStage").className = `movement-stage ${movementClass}`;
-  const movementImage = $("#movementImage");
-  movementImage.src = getPoseImage(movementClass);
-  movementImage.alt = `${title}: ${instruction}`;
+  $("#pauseLabel").textContent = "PAUSA";
+  $("#movementImage").src = getPoseImage(movementClass);
+  $("#movementImage").alt = `${title}: ${instruction}`;
+
+  renderSessionSegments();
+  updateNextMoveCard();
   updateTimerUI();
   signalChange();
   speak(`${title}. ${instruction}. ${breath}.`);
@@ -356,21 +442,14 @@ function tick() {
 }
 
 function updateTimerUI() {
-  const minutes = Math.floor(moveSecondsLeft / 60);
-  const seconds = moveSecondsLeft % 60;
-  $("#timerText").textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-  const circumference = 326.73;
-  const ratio = moveDuration ? moveSecondsLeft / moveDuration : 0;
-  $("#timerCircle").style.strokeDashoffset = String(circumference * (1 - ratio));
-  const totalElapsed = currentRoutine.moves.slice(0, currentMoveIndex).reduce((sum, m) => sum + m[4], 0) + (moveDuration - moveSecondsLeft);
-  const totalDuration = currentRoutine.moves.reduce((sum, m) => sum + m[4], 0);
-  $("#sessionProgress").style.width = `${Math.min(100, (totalElapsed / totalDuration) * 100)}%`;
+  $("#timerText").textContent = formatTime(moveSecondsLeft);
+  $("#sessionStepLabel").textContent = formatTime(totalRemainingSecondsForCurrentRoutine());
 }
 
 function togglePause() {
   isPaused = !isPaused;
   $("#pauseIcon").textContent = isPaused ? "▶" : "Ⅱ";
-  $("#pauseLabel").textContent = isPaused ? "Riprendi" : "Pausa";
+  $("#pauseLabel").textContent = isPaused ? "RIPRENDI" : "PAUSA";
   if (isPaused) window.speechSynthesis?.cancel();
   else speak("Riprendiamo con calma.");
 }
@@ -393,12 +472,19 @@ function finishSession() {
   clearInterval(timerId);
   window.speechSynthesis?.cancel();
   const actualMinutes = currentRoutine.minutes;
-  state.sessions.push({ date: localDateKey(), minutes: actualMinutes, routineId: currentRoutine.id, mood: null, completedAt: new Date().toISOString() });
+  state.sessions.push({
+    date: localDateKey(),
+    minutes: actualMinutes,
+    routineId: currentRoutine.id,
+    mood: null,
+    completedAt: new Date().toISOString()
+  });
   state.bestStreak = Math.max(Number(state.bestStreak || 0), calculateStreak());
   saveAll();
+
   $("#completionText").textContent = `${actualMinutes} minuti di movimento lento e consapevole.`;
-  $("#completionMinutes").textContent = actualMinutes;
-  $("#completionStreak").textContent = calculateStreak();
+  $("#completionMinutes").textContent = String(actualMinutes);
+  $("#completionStreak").textContent = String(calculateStreak());
   $$(".mood-picker button").forEach(btn => btn.classList.remove("selected"));
   showScreen("completion");
   speak("Sessione completata. Hai scelto di prenderti cura di te.");
@@ -436,15 +522,30 @@ function bindEvents() {
     const chip = event.target.closest(".filter-chip");
     if (!chip) return;
     $$(".filter-chip").forEach(btn => btn.classList.toggle("active", btn === chip));
-    renderRoutines(chip.dataset.filter);
+    renderTraining(chip.dataset.filter);
+  });
+
+  $("#startTodayBtn").addEventListener("click", event => startRoutine(event.currentTarget.dataset.routineId));
+  $("#openMorningChallengeBtn").addEventListener("click", () => startRoutine("risveglio"));
+  $("#challengeStartBtn").addEventListener("click", () => startRoutine("risveglio"));
+  $("#startChairBtn").addEventListener("click", () => startRoutine("sedia"));
+  $("#chairChallengeBtn").addEventListener("click", () => {
+    state.acceptedChallenges = { ...(state.acceptedChallenges || {}), chair: true };
+    saveAll();
+    renderChallenges();
+    startRoutine("sedia");
   });
 
   $("#pauseBtn").addEventListener("click", togglePause);
   $("#prevMoveBtn").addEventListener("click", () => loadMove(currentMoveIndex - 1));
   $("#nextMoveBtn").addEventListener("click", () => loadMove(currentMoveIndex + 1));
+  $("#nextMoveCard").addEventListener("click", () => loadMove(currentMoveIndex + 1));
   $("#exitSessionBtn").addEventListener("click", exitSession);
   $("#finishBtn").addEventListener("click", () => showScreen("home"));
-  $("#backBtn").addEventListener("click", () => showScreen("home"));
+  $("#infoBtn").addEventListener("click", () => {
+    showConfirm("Indicazione del movimento", `${$("#movementTitle").textContent}: ${$("#movementInstruction").textContent} — ${$("#breathText").textContent}.`, null);
+  });
+
   $("#soundBtn").addEventListener("click", () => {
     settings.voice = !settings.voice;
     saveAll();
@@ -452,6 +553,7 @@ function bindEvents() {
     if (!settings.voice) window.speechSynthesis?.cancel();
     else speak("Guida vocale attiva.");
   });
+  $("#voiceStageBtn").addEventListener("click", () => togglePause());
 
   $("#voiceToggle").addEventListener("change", event => { settings.voice = event.target.checked; saveAll(); renderSettings(); });
   $("#vibrationToggle").addEventListener("change", event => { settings.vibration = event.target.checked; saveAll(); });
@@ -469,8 +571,11 @@ function bindEvents() {
   $("#resetProgressBtn").addEventListener("click", () => showConfirm("Azzerare i progressi?", "Verranno eliminati sessioni, minuti e traguardi da questo dispositivo.", () => {
     state = { ...defaultState, sessions: [] };
     saveAll();
+    renderHome();
+    renderChallenges();
     renderProgress();
   }));
+
   $("#confirmActionBtn").addEventListener("click", () => {
     if (typeof confirmCallback === "function") confirmCallback();
     confirmCallback = null;
@@ -503,6 +608,8 @@ function registerServiceWorker() {
 function init() {
   bindEvents();
   renderSettings();
+  renderHome();
+  renderChallenges();
   showScreen("home");
   registerServiceWorker();
   if (!settings.safetySeen) {

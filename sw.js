@@ -1,4 +1,4 @@
-const CACHE_NAME = "tai-chi-facile-v2";
+const CACHE_NAME = "tai-chi-facile-v12";
 const ASSETS = [
   "./",
   "./index.html",
@@ -7,16 +7,13 @@ const ASSETS = [
   "./manifest.webmanifest",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
-  "./assets/poses/root.svg",
-  "./assets/poses/open.svg",
-  "./assets/poses/cloud.svg",
-  "./assets/poses/shift.svg",
-  "./assets/poses/push.svg",
-  "./assets/poses/seated.svg",
-  "./assets/poses/seated-open.svg",
-  "./assets/poses/seated-cloud.svg",
-  "./assets/poses/seated-push.svg",
-  "./assets/poses/seated-shift.svg"
+  "./assets/img/hero.png",
+  "./assets/img/rooted.png",
+  "./assets/img/opening.png",
+  "./assets/img/cloud.png",
+  "./assets/img/shift.png",
+  "./assets/img/push.png",
+  "./assets/img/seated.png"
 ];
 
 self.addEventListener("install", event => {
