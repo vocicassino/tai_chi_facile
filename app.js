@@ -1,7 +1,7 @@
 "use strict";
 
-const STORAGE_KEY = "taiChiFacileStateV12";
-const SETTINGS_KEY = "taiChiFacileSettingsV12";
+const STORAGE_KEY = "taiChiFacileStateV13";
+const SETTINGS_KEY = "taiChiFacileSettingsV13";
 const SESSION_TARGET = 30;
 
 const routines = [
@@ -113,34 +113,48 @@ const routines = [
 ];
 
 const challenges = {
-  morning: {
-    id: "morning",
-    title: "Routine mattutina",
-    targetDays: 7,
-    routineId: "risveglio"
-  },
-  chair: {
-    id: "chair",
-    title: "Allenamento con sedia",
-    targetDays: 7,
-    routineId: "sedia"
-  }
+  morning: { id: "morning", title: "Routine mattutina", targetDays: 7, routineId: "risveglio" },
+  chair: { id: "chair", title: "Allenamento con sedia", targetDays: 7, routineId: "sedia" }
 };
 
 const defaultSettings = { voice: true, vibration: true, reducedMotion: false, voiceRate: 0.9, safetySeen: false };
 const defaultState = { sessions: [], bestStreak: 0, lastRoutine: "risveglio", acceptedChallenges: { chair: false } };
 
+const defaultPreview = {
+  root: "assets/img/rooted.png",
+  open: "assets/img/opening.png",
+  cloud: "assets/img/cloud.png",
+  shift: "assets/img/shift.png",
+  push: "assets/img/push.png",
+  seated: "assets/img/seated.png"
+};
+
+const animatedMoves = {
+  "move-root": ["assets/anim/shift/1.jpg", "assets/anim/shift/2.jpg", "assets/anim/shift/3.jpg", "assets/anim/shift/4.jpg"],
+  "move-open": ["assets/anim/open/1.jpg", "assets/anim/open/2.jpg", "assets/anim/open/3.jpg", "assets/anim/open/4.jpg"],
+  "move-cloud": ["assets/anim/cloud/1.jpg", "assets/anim/cloud/2.jpg", "assets/anim/cloud/3.jpg", "assets/anim/cloud/4.jpg"],
+  "move-shift": ["assets/anim/shift/1.jpg", "assets/anim/shift/2.jpg", "assets/anim/shift/3.jpg", "assets/anim/shift/4.jpg"],
+  "move-push": ["assets/anim/push/1.jpg", "assets/anim/push/2.jpg", "assets/anim/push/3.jpg", "assets/anim/push/4.jpg"],
+  "move-seated": ["assets/anim/seated/1.jpg", "assets/anim/seated/2.jpg", "assets/anim/seated/3.jpg", "assets/anim/seated/4.jpg"],
+  "move-seated-open": ["assets/anim/seated/1.jpg", "assets/anim/seated/2.jpg", "assets/anim/seated/3.jpg", "assets/anim/seated/4.jpg"],
+  "move-seated-cloud": ["assets/anim/seated/1.jpg", "assets/anim/seated/2.jpg", "assets/anim/seated/3.jpg", "assets/anim/seated/4.jpg"],
+  "move-seated-push": ["assets/anim/seated/1.jpg", "assets/anim/seated/2.jpg", "assets/anim/seated/3.jpg", "assets/anim/seated/4.jpg"],
+  "move-seated-shift": ["assets/anim/seated/1.jpg", "assets/anim/seated/2.jpg", "assets/anim/seated/3.jpg", "assets/anim/seated/4.jpg"]
+};
+
 let settings = loadJSON(SETTINGS_KEY, defaultSettings);
 let state = loadJSON(STORAGE_KEY, defaultState);
-let currentScreen = "home";
 let currentRoutine = null;
 let currentMoveIndex = 0;
 let moveSecondsLeft = 0;
-let moveDuration = 0;
 let timerId = null;
 let isPaused = false;
 let deferredInstallPrompt = null;
 let confirmCallback = null;
+let speechEnabledInSession = true;
+let animationIntervalId = null;
+let currentAnimationFrames = [];
+let currentAnimationPointer = 0;
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -204,14 +218,6 @@ function calculateStreak() {
   return streak;
 }
 
-function getRecommendedRoutine() {
-  const hour = new Date().getHours();
-  if (hour >= 20) return routines.find(r => r.id === "sera");
-  if (hour >= 13) return routines.find(r => r.id === "equilibrio");
-  if (state.lastRoutine === "sedia") return routines.find(r => r.id === "sedia");
-  return routines.find(r => r.id === "risveglio");
-}
-
 function totalMinutesPracticed() {
   return Math.round(state.sessions.reduce((sum, s) => sum + Number(s.minutes || 0), 0));
 }
@@ -219,10 +225,17 @@ function totalMinutesPracticed() {
 function completedChallengesCount() {
   let total = 0;
   Object.values(challenges).forEach(challenge => {
-    const done = countRoutineChallengeDays(challenge.routineId, challenge.targetDays) >= challenge.targetDays;
-    if (done) total += 1;
+    if (countRoutineChallengeDays(challenge.routineId, challenge.targetDays) >= challenge.targetDays) total += 1;
   });
   return total;
+}
+
+function getRecommendedRoutine() {
+  const hour = new Date().getHours();
+  if (hour >= 20) return routines.find(r => r.id === "sera");
+  if (hour >= 13) return routines.find(r => r.id === "equilibrio");
+  if (state.lastRoutine === "sedia") return routines.find(r => r.id === "sedia");
+  return routines.find(r => r.id === "risveglio");
 }
 
 function renderWeekRow() {
@@ -234,11 +247,10 @@ function renderWeekRow() {
   $("#weekSelector").innerHTML = Array.from({ length: 7 }, (_, index) => {
     const day = addDays(monday, index);
     const key = localDateKey(day);
-    const weekday = formatter.format(day).replace('.', '');
     const classes = ["week-day"];
     if (key === localDateKey(today)) classes.push("active");
     if (byDate[key]?.length) classes.push("done");
-    return `<div class="${classes.join(" ")}"><span>${weekday.slice(0, 3)}</span><strong>${day.getDate()}</strong></div>`;
+    return `<div class="${classes.join(" ")}"><span>${formatter.format(day).replace('.', '').slice(0,3)}</span><strong>${day.getDate()}</strong></div>`;
   }).join("");
 }
 
@@ -262,10 +274,7 @@ function renderHome() {
 }
 
 function renderTraining(filter = "all") {
-  const visible = filter === "all"
-    ? routines
-    : routines.filter(r => r.type.includes(filter));
-
+  const visible = filter === "all" ? routines : routines.filter(r => r.type.includes(filter));
   $("#routineList").innerHTML = visible.map(r => `
     <button class="training-card" data-routine-id="${r.id}">
       <div class="training-thumb"><img src="${r.image}" alt="${r.shortTitle}"></div>
@@ -283,7 +292,7 @@ function renderChallenges() {
   $("#morningChallengeCounter").textContent = `${progress}/${challenges.morning.targetDays} GIORNI`;
   $("#morningChallengeBar").style.width = `${(progress / challenges.morning.targetDays) * 100}%`;
   $("#completedChallengesCount").textContent = String(completedChallengesCount());
-  $("#chairChallengeBtn").textContent = state.acceptedChallenges?.chair ? "APRl".replace('l','I') : "ACCETTA";
+  $("#chairChallengeBtn").textContent = state.acceptedChallenges?.chair ? "APRI" : "ACCETTA";
 }
 
 function renderProgress() {
@@ -324,21 +333,27 @@ function renderProgress() {
   `).join("");
 }
 
+function setVoiceButtonsUI() {
+  $("#soundBtn").textContent = settings.voice ? "🔊" : "🔇";
+  $("#voiceStageBtn").textContent = settings.voice ? "↻" : "↻";
+  $("#voiceStageBtn").setAttribute("aria-label", "Ripeti istruzioni");
+}
+
 function renderSettings() {
   $("#voiceToggle").checked = settings.voice;
   $("#vibrationToggle").checked = settings.vibration;
   $("#motionToggle").checked = settings.reducedMotion;
   $("#voiceRate").value = String(settings.voiceRate);
   document.body.classList.toggle("reduced-motion", settings.reducedMotion);
-  $("#soundBtn").textContent = settings.voice ? "🔊" : "🔇";
+  setVoiceButtonsUI();
 }
 
 function showScreen(name) {
-  currentScreen = name;
   $$(".screen").forEach(screen => screen.classList.toggle("active", screen.dataset.screen === name));
   $$(".nav-item").forEach(item => item.classList.toggle("active", item.dataset.nav === name));
   document.body.classList.toggle("session-active", ["session", "completion"].includes(name));
 
+  if (name !== "session") stopMovementAnimation();
   if (name === "home") renderHome();
   if (name === "training") renderTraining($(".filter-chip.active")?.dataset.filter || "all");
   if (name === "challenge") renderChallenges();
@@ -348,21 +363,46 @@ function showScreen(name) {
   window.scrollTo({ top: 0, behavior: settings.reducedMotion ? "auto" : "smooth" });
 }
 
-const poseImages = {
-  "move-root": "assets/img/rooted.png",
-  "move-open": "assets/img/opening.png",
-  "move-cloud": "assets/img/cloud.png",
-  "move-shift": "assets/img/shift.png",
-  "move-push": "assets/img/push.png",
-  "move-seated": "assets/img/seated.png",
-  "move-seated-open": "assets/img/seated.png",
-  "move-seated-cloud": "assets/img/seated.png",
-  "move-seated-push": "assets/img/seated.png",
-  "move-seated-shift": "assets/img/seated.png"
-};
+function previewForMove(movementClass) {
+  const frames = animatedMoves[movementClass];
+  if (frames?.length) return frames[0];
+  if (movementClass.includes("seated")) return defaultPreview.seated;
+  if (movementClass.includes("push")) return defaultPreview.push;
+  if (movementClass.includes("cloud")) return defaultPreview.cloud;
+  if (movementClass.includes("shift")) return defaultPreview.shift;
+  if (movementClass.includes("open")) return defaultPreview.open;
+  return defaultPreview.root;
+}
 
-function getPoseImage(movementClass) {
-  return poseImages[movementClass] || poseImages["move-root"];
+function framesForMove(movementClass) {
+  return animatedMoves[movementClass] || [previewForMove(movementClass)];
+}
+
+function pingPongFrames(frames) {
+  if (!frames || frames.length <= 1) return frames || [];
+  return [...frames, ...frames.slice(1, -1).reverse()];
+}
+
+function stopMovementAnimation() {
+  clearInterval(animationIntervalId);
+  animationIntervalId = null;
+}
+
+function startMovementAnimation(movementClass, altText = "Movimento di Tai Chi") {
+  stopMovementAnimation();
+  currentAnimationFrames = pingPongFrames(framesForMove(movementClass));
+  currentAnimationPointer = 0;
+  const movementImage = $("#movementImage");
+  movementImage.src = currentAnimationFrames[0] || previewForMove(movementClass);
+  movementImage.alt = altText;
+
+  const speed = settings.reducedMotion ? 1200 : 700;
+  if (currentAnimationFrames.length <= 1) return;
+  animationIntervalId = setInterval(() => {
+    if (isPaused) return;
+    currentAnimationPointer = (currentAnimationPointer + 1) % currentAnimationFrames.length;
+    movementImage.src = currentAnimationFrames[currentAnimationPointer];
+  }, speed);
 }
 
 function startRoutine(routineId) {
@@ -378,9 +418,7 @@ function startRoutine(routineId) {
 
 function totalRemainingSecondsForCurrentRoutine() {
   if (!currentRoutine) return 0;
-  const currentRemaining = moveSecondsLeft;
-  const upcoming = currentRoutine.moves.slice(currentMoveIndex + 1).reduce((sum, move) => sum + move[4], 0);
-  return currentRemaining + upcoming;
+  return moveSecondsLeft + currentRoutine.moves.slice(currentMoveIndex + 1).reduce((sum, move) => sum + move[4], 0);
 }
 
 function renderSessionSegments() {
@@ -401,8 +439,18 @@ function updateNextMoveCard() {
   }
   card.classList.remove("hidden");
   $("#nextMoveTitle").textContent = next[0];
-  $("#nextMoveImage").src = getPoseImage(next[5]);
+  $("#nextMoveImage").src = previewForMove(next[5]);
   $("#nextMoveImage").alt = next[0];
+}
+
+function speak(text) {
+  if (!settings.voice || !speechEnabledInSession || !("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "it-IT";
+  utterance.rate = Number(settings.voiceRate || 0.9);
+  utterance.pitch = 0.95;
+  window.speechSynthesis.speak(utterance);
 }
 
 function loadMove(index) {
@@ -412,7 +460,6 @@ function loadMove(index) {
 
   currentMoveIndex = index;
   const [title, instruction, breath, focus, seconds, movementClass] = currentRoutine.moves[index];
-  moveDuration = seconds;
   moveSecondsLeft = seconds;
   isPaused = false;
   clearInterval(timerId);
@@ -423,12 +470,11 @@ function loadMove(index) {
   $("#breathText").textContent = breath;
   $("#pauseIcon").textContent = "Ⅱ";
   $("#pauseLabel").textContent = "PAUSA";
-  $("#movementImage").src = getPoseImage(movementClass);
-  $("#movementImage").alt = `${title}: ${instruction}`;
 
   renderSessionSegments();
   updateNextMoveCard();
   updateTimerUI();
+  startMovementAnimation(movementClass, `${title}: ${instruction}`);
   signalChange();
   speak(`${title}. ${instruction}. ${breath}.`);
   timerId = setInterval(tick, 1000);
@@ -446,42 +492,45 @@ function updateTimerUI() {
   $("#sessionStepLabel").textContent = formatTime(totalRemainingSecondsForCurrentRoutine());
 }
 
+function signalChange() {
+  if (settings.vibration && navigator.vibrate) navigator.vibrate(70);
+}
+
 function togglePause() {
   isPaused = !isPaused;
   $("#pauseIcon").textContent = isPaused ? "▶" : "Ⅱ";
   $("#pauseLabel").textContent = isPaused ? "RIPRENDI" : "PAUSA";
-  if (isPaused) window.speechSynthesis?.cancel();
-  else speak("Riprendiamo con calma.");
+  if (isPaused) {
+    window.speechSynthesis?.cancel();
+  } else {
+    const breath = $("#breathText").textContent;
+    speak(`Riprendiamo con calma. ${breath}.`);
+  }
 }
 
-function signalChange() {
-  if (settings.vibration && navigator.vibrate) navigator.vibrate(80);
+function repeatCurrentInstruction() {
+  if (!currentRoutine) return;
+  const move = currentRoutine.moves[currentMoveIndex];
+  if (!move) return;
+  speak(`${move[0]}. ${move[1]}. ${move[2]}.`);
 }
 
-function speak(text) {
-  if (!settings.voice || !("speechSynthesis" in window)) return;
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "it-IT";
-  utterance.rate = Number(settings.voiceRate || 0.9);
-  utterance.pitch = 0.95;
-  window.speechSynthesis.speak(utterance);
+function toggleVoice() {
+  settings.voice = !settings.voice;
+  saveAll();
+  renderSettings();
+  if (!settings.voice) window.speechSynthesis?.cancel();
+  else repeatCurrentInstruction();
 }
 
 function finishSession() {
   clearInterval(timerId);
+  stopMovementAnimation();
   window.speechSynthesis?.cancel();
   const actualMinutes = currentRoutine.minutes;
-  state.sessions.push({
-    date: localDateKey(),
-    minutes: actualMinutes,
-    routineId: currentRoutine.id,
-    mood: null,
-    completedAt: new Date().toISOString()
-  });
+  state.sessions.push({ date: localDateKey(), minutes: actualMinutes, routineId: currentRoutine.id, mood: null, completedAt: new Date().toISOString() });
   state.bestStreak = Math.max(Number(state.bestStreak || 0), calculateStreak());
   saveAll();
-
   $("#completionText").textContent = `${actualMinutes} minuti di movimento lento e consapevole.`;
   $("#completionMinutes").textContent = String(actualMinutes);
   $("#completionStreak").textContent = String(calculateStreak());
@@ -492,6 +541,7 @@ function finishSession() {
 
 function exitSession() {
   clearInterval(timerId);
+  stopMovementAnimation();
   window.speechSynthesis?.cancel();
   showConfirm("Interrompere la sessione?", "I progressi di questa sessione non verranno registrati.", () => showScreen("home"));
 }
@@ -518,57 +568,48 @@ function bindEvents() {
     if (routine) startRoutine(routine.dataset.routineId);
   });
 
-  $("#filterRow").addEventListener("click", event => {
+  $("#filterRow")?.addEventListener("click", event => {
     const chip = event.target.closest(".filter-chip");
     if (!chip) return;
     $$(".filter-chip").forEach(btn => btn.classList.toggle("active", btn === chip));
     renderTraining(chip.dataset.filter);
   });
 
-  $("#startTodayBtn").addEventListener("click", event => startRoutine(event.currentTarget.dataset.routineId));
-  $("#openMorningChallengeBtn").addEventListener("click", () => startRoutine("risveglio"));
-  $("#challengeStartBtn").addEventListener("click", () => startRoutine("risveglio"));
-  $("#startChairBtn").addEventListener("click", () => startRoutine("sedia"));
-  $("#chairChallengeBtn").addEventListener("click", () => {
+  $("#startTodayBtn")?.addEventListener("click", event => startRoutine(event.currentTarget.dataset.routineId));
+  $("#openMorningChallengeBtn")?.addEventListener("click", () => startRoutine("risveglio"));
+  $("#challengeStartBtn")?.addEventListener("click", () => startRoutine("risveglio"));
+  $("#startChairBtn")?.addEventListener("click", () => startRoutine("sedia"));
+  $("#chairChallengeBtn")?.addEventListener("click", () => {
     state.acceptedChallenges = { ...(state.acceptedChallenges || {}), chair: true };
     saveAll();
     renderChallenges();
     startRoutine("sedia");
   });
 
-  $("#pauseBtn").addEventListener("click", togglePause);
-  $("#prevMoveBtn").addEventListener("click", () => loadMove(currentMoveIndex - 1));
-  $("#nextMoveBtn").addEventListener("click", () => loadMove(currentMoveIndex + 1));
-  $("#nextMoveCard").addEventListener("click", () => loadMove(currentMoveIndex + 1));
-  $("#exitSessionBtn").addEventListener("click", exitSession);
-  $("#finishBtn").addEventListener("click", () => showScreen("home"));
-  $("#infoBtn").addEventListener("click", () => {
-    showConfirm("Indicazione del movimento", `${$("#movementTitle").textContent}: ${$("#movementInstruction").textContent} — ${$("#breathText").textContent}.`, null);
-  });
+  $("#pauseBtn")?.addEventListener("click", togglePause);
+  $("#prevMoveBtn")?.addEventListener("click", () => loadMove(currentMoveIndex - 1));
+  $("#nextMoveBtn")?.addEventListener("click", () => loadMove(currentMoveIndex + 1));
+  $("#nextMoveCard")?.addEventListener("click", () => loadMove(currentMoveIndex + 1));
+  $("#exitSessionBtn")?.addEventListener("click", exitSession);
+  $("#finishBtn")?.addEventListener("click", () => showScreen("home"));
+  $("#infoBtn")?.addEventListener("click", () => showConfirm("Indicazione del movimento", `${$("#movementTitle").textContent}: ${$("#movementInstruction").textContent} — ${$("#breathText").textContent}.`, null));
+  $("#soundBtn")?.addEventListener("click", toggleVoice);
+  $("#voiceStageBtn")?.addEventListener("click", repeatCurrentInstruction);
 
-  $("#soundBtn").addEventListener("click", () => {
-    settings.voice = !settings.voice;
-    saveAll();
-    renderSettings();
-    if (!settings.voice) window.speechSynthesis?.cancel();
-    else speak("Guida vocale attiva.");
-  });
-  $("#voiceStageBtn").addEventListener("click", () => togglePause());
+  $("#voiceToggle")?.addEventListener("change", event => { settings.voice = event.target.checked; saveAll(); renderSettings(); });
+  $("#vibrationToggle")?.addEventListener("change", event => { settings.vibration = event.target.checked; saveAll(); });
+  $("#motionToggle")?.addEventListener("change", event => { settings.reducedMotion = event.target.checked; saveAll(); renderSettings(); });
+  $("#voiceRate")?.addEventListener("change", event => { settings.voiceRate = Number(event.target.value); saveAll(); speak("Questa è la nuova velocità della voce."); });
 
-  $("#voiceToggle").addEventListener("change", event => { settings.voice = event.target.checked; saveAll(); renderSettings(); });
-  $("#vibrationToggle").addEventListener("change", event => { settings.vibration = event.target.checked; saveAll(); });
-  $("#motionToggle").addEventListener("change", event => { settings.reducedMotion = event.target.checked; saveAll(); renderSettings(); });
-  $("#voiceRate").addEventListener("change", event => { settings.voiceRate = Number(event.target.value); saveAll(); speak("Questa è la nuova velocità della voce."); });
-
-  $("#openSafetyBtn").addEventListener("click", () => {
+  $("#openSafetyBtn")?.addEventListener("click", () => {
     $("#safetyAccepted").checked = false;
     $("#acceptSafetyBtn").disabled = true;
     $("#safetyDialog").showModal();
   });
-  $("#safetyAccepted").addEventListener("change", event => { $("#acceptSafetyBtn").disabled = !event.target.checked; });
-  $("#acceptSafetyBtn").addEventListener("click", () => { settings.safetySeen = true; saveAll(); });
+  $("#safetyAccepted")?.addEventListener("change", event => { $("#acceptSafetyBtn").disabled = !event.target.checked; });
+  $("#acceptSafetyBtn")?.addEventListener("click", () => { settings.safetySeen = true; saveAll(); });
 
-  $("#resetProgressBtn").addEventListener("click", () => showConfirm("Azzerare i progressi?", "Verranno eliminati sessioni, minuti e traguardi da questo dispositivo.", () => {
+  $("#resetProgressBtn")?.addEventListener("click", () => showConfirm("Azzerare i progressi?", "Verranno eliminati sessioni, minuti e traguardi da questo dispositivo.", () => {
     state = { ...defaultState, sessions: [] };
     saveAll();
     renderHome();
@@ -576,7 +617,7 @@ function bindEvents() {
     renderProgress();
   }));
 
-  $("#confirmActionBtn").addEventListener("click", () => {
+  $("#confirmActionBtn")?.addEventListener("click", () => {
     if (typeof confirmCallback === "function") confirmCallback();
     confirmCallback = null;
   });
@@ -588,7 +629,7 @@ function bindEvents() {
     deferredInstallPrompt = event;
     $("#installBtn").hidden = false;
   });
-  $("#installBtn").addEventListener("click", async () => {
+  $("#installBtn")?.addEventListener("click", async () => {
     if (deferredInstallPrompt) {
       deferredInstallPrompt.prompt();
       await deferredInstallPrompt.userChoice;
@@ -612,9 +653,7 @@ function init() {
   renderChallenges();
   showScreen("home");
   registerServiceWorker();
-  if (!settings.safetySeen) {
-    setTimeout(() => $("#safetyDialog").showModal(), 300);
-  }
+  if (!settings.safetySeen) setTimeout(() => $("#safetyDialog").showModal(), 300);
 }
 
 document.addEventListener("DOMContentLoaded", init);
